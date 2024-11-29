@@ -1,0 +1,61 @@
+.flavor-parent {
+    border-radius: 25px;
+    background-color: lightgray;
+    border: 1.5px solid black;
+    box-shadow: -1px 1px 1px rgba(0,0,0,0.3)
+}
+.flavor-header {
+    justify-content: space-between;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.flavor-header-child {
+    padding-top: 0.75rem;
+}
+.flavor-delete {
+    color: red;
+    cursor: pointer;
+    font-weight: normal;
+}
+.flavor-delete:hover {
+    font-weight: bold;
+}
+.flavor-inventory-control {
+    width: 65%;
+    height: 15rem;
+}
+.flavor-inventory-display {
+    width: 35%;
+    height: 15rem;
+    display: inline-block;
+    overflow-y: auto;
+}
+.flavor-inventory-display td, .flavor-inventory-display tr {
+    width: 25vw;
+}
+.flavor-inventory-display::-webkit-scrollbar {
+    display: none;
+}
+
+.form-check-input {
+    transition: background-color 165ms;
+    cursor: pointer;
+}
+.form-check-input:checked:hover {
+    transition: background-color 165ms;
+    background-color: darkblue !important;
+}
+.form-check-input:not(checked):hover {
+    transition: background-color 165ms;
+    background-color: darkgray !important;
+}
+.flavor-edit-field {
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.link-btn {
+    cursor: pointer;
+}
+.link-btn:hover {
+    font-weight: bold !important;
+}
