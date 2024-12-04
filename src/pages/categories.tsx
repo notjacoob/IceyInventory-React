@@ -2,13 +2,16 @@ import { FormEvent, useEffect, useState } from "react"
 import CategoriesService from "../service/CategoriesService"
 import Navbar from "./components/navbar"
 import { Category } from "../models/category.model"
+import { IServiceProvider, useService } from "./components/services"
 
-const CategoriesComponent = (props: { categoriesService: CategoriesService }): JSX.Element => {
+const CategoriesComponent = (props: {}): JSX.Element => {
+
+    const services: IServiceProvider|undefined = useService()
 
     const [categories, setCategories] = useState<Category[]>([])
 
     useEffect(() => {
-        props.categoriesService.getCategories(cat => {
+        services.categoriesService().getCategories(cat => {
             setCategories(cat)
         })
     })
@@ -19,7 +22,7 @@ const CategoriesComponent = (props: { categoriesService: CategoriesService }): J
 
     const del = (id: number) => {
         if (window.confirm("Are you sure you want to delete this category? All associated flavors will also be deleted.")) {
-            props.categoriesService.deleteCategory(id, status => {
+            services.categoriesService().deleteCategory(id, status => {
                 if (status.affectedRows > 0) {
                     setCategories(categories.filter(c => c.id !== id))
                 } else {
@@ -53,7 +56,7 @@ const CategoriesComponent = (props: { categoriesService: CategoriesService }): J
         event.preventDefault()
         if (editObj.newName != undefined && editObj.newName != '' && editObj.newName != cat.name) {
             cat.name = editObj.newName
-            props.categoriesService.updateCategory(cat, (status) => {
+            services.categoriesService().updateCategory(cat, (status) => {
                 if (status.affectedRows > 0) {
                     setCategories(categories.map(c => c.id === cat.id ? cat : c))
                     setEditObj({
@@ -96,9 +99,9 @@ const CategoriesComponent = (props: { categoriesService: CategoriesService }): J
     }
     const confirmNewCat = () => {
         if (newCatName != undefined && newCatName != '') {
-            props.categoriesService.postCategory(newCatName, status => {
+            services.categoriesService().postCategory(newCatName, status => {
                 if (status.affectedRows > 0) {
-                    props.categoriesService.getCategoryId(status.insertId, cat => {
+                    services.categoriesService().getCategoryId(status.insertId, cat => {
                         setCategories([...categories, cat])
                         cancelNewCat()
                     })

@@ -2,12 +2,13 @@ import { Batch } from "../../models/batch.model";
 import { BatchCreationWrapper } from "../../models/batchCreationWrapper.model";
 import { BatchWrapper } from "../../models/batchWrapper.model";
 import { Flavor } from "../../models/flavor.model";
-import BatchService from "../../service/BatchService";
-import FlavorsService from "../../service/FlavorsService";
-import { ChangeEvent, FormEvent, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
+import { FormEvent, useEffect, useReducer, useRef, useState } from "react";
 import "../css/flavor.scss"
+import { useService } from "./services";
 
-const FlavorComponent = (props: { flavorService: FlavorsService, batchService: BatchService, onDelete: (id: number) => void, flavor: Flavor }) => {
+const FlavorComponent = (props: {onDelete: (id: number) => void, flavor: Flavor }) => {
+
+    const services = useService()
 
     const formatBatches = (): BatchWrapper[] => {
         let fixedBatches: BatchWrapper[] = []
@@ -62,7 +63,7 @@ const FlavorComponent = (props: { flavorService: FlavorsService, batchService: B
         if (toggleState.inUse != props.flavor.inUse || toggleState.making != props.flavor.making) {
             props.flavor.making = toggleState.making
             props.flavor.inUse = toggleState.inUse
-            props.flavorService.updateFlavor(props.flavor, (data) => {
+            services.flavorService().updateFlavor(props.flavor, (data) => {
                 if (data.changedRows < 1) {
                     alert("Update was not successful")
                 }
@@ -81,7 +82,7 @@ const FlavorComponent = (props: { flavorService: FlavorsService, batchService: B
             if (newBatch.dateMade != null) {
                 if (newBatch.type === "Full" || newBatch.type === "Half") {
                     for (let i = 0; i < newBatch.count; i++) {
-                        props.batchService.postBatch({
+                        services.batchService().postBatch({
                             id: props.flavor.id,
                             type: newBatch.type,
                             dateMade: String(newBatch.dateMade)
@@ -126,7 +127,7 @@ const FlavorComponent = (props: { flavorService: FlavorsService, batchService: B
     const submitEdit = () => {
         props.flavor.costPerBatch = newCostPerBatch!!
         props.flavor.name = newName!!
-        props.flavorService.updateFlavor(props.flavor, (status) => {
+        services.flavorService().updateFlavor(props.flavor, (status) => {
             if (status.affectedRows > 0) {
                 toggleEdit()
             }
@@ -135,7 +136,7 @@ const FlavorComponent = (props: { flavorService: FlavorsService, batchService: B
     
     const sendDelete = () => {
         if (window.confirm("Are you sure you want to delete this flavor?")) {
-            props.flavorService.deleteFlavor(props.flavor.id, (data) => {
+            services.flavorService().deleteFlavor(props.flavor.id, (data) => {
                 if (data.affectedRows > 0) {
                     props.onDelete(props.flavor.id)
                 } else {

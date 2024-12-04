@@ -8,18 +8,20 @@ import Navbar from "./components/navbar";
 import BatchService from "../service/BatchService";
 import CategoriesService from "../service/CategoriesService";
 import NoFlavors from "./components/no-flavors";
+import { IServiceProvider, useService } from "./components/services";
 
-const FlavorManagement = (props: { flavorService: FlavorsService, batchService: BatchService, categoryService: CategoriesService }) => {
+const FlavorManagement = () => {
 
+    const services: IServiceProvider = useService()
     const [openCategories, setOpenCategories] = useState<number[]>([])
     let [flavors, setFlavors] = useState<Flavor[]>([])
     let [categories, setCategories] = useState<Category[]>([])
 
     useEffect(() => {
-        props.flavorService.getFlavors((f) => {
+        services.flavorService().getFlavors((f) => {
             setFlavors(f)
         })
-        props.categoryService.getCategories(cat => {
+        services.categoriesService().getCategories(cat => {
             setCategories(cat)
         })
     }, [])
@@ -36,7 +38,7 @@ const FlavorManagement = (props: { flavorService: FlavorsService, batchService: 
     const fixCategories = () => {
         return categories.map(c => {
             if (flavors.filter(f => f.category_id.id === c.id).length > 0) {
-                return <FlavorManagementCategory category={c} key={c.id} flavors={flavorsForCat(c)} flavorService={props.flavorService} batchService={props.batchService} onFlavorDelete={handleDeletion} openCategories={openCategories} flipOpenCategory={flipOpenCategory}/>
+                return <FlavorManagementCategory category={c} key={c.id} flavors={flavorsForCat(c)} onFlavorDelete={handleDeletion} openCategories={openCategories} flipOpenCategory={flipOpenCategory}/>
             } else {
                 return <NoFlavors category={c}/>
             }

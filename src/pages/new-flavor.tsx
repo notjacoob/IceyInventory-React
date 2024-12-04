@@ -1,13 +1,12 @@
 import { FormEvent, useEffect, useState } from "react"
-import CategoriesService from "../service/CategoriesService"
-import FlavorsService from "../service/FlavorsService"
 import { Category } from "../models/category.model"
 import { Flavor } from "../models/flavor.model"
 import { Link, useNavigate } from "react-router-dom"
 import Navbar from "./components/navbar"
+import { useService } from "./components/services"
 
-const NewFlavor = (props: {categoriesService: CategoriesService, flavorsService: FlavorsService}): JSX.Element => {
-
+const NewFlavor = (): JSX.Element => {
+    const services = useService()
     const [categories, setCategories] = useState<Category[]>([])
     const [flavorName, setFlavorName] = useState<string|undefined>(undefined)
     const [categoryId, setCategoryId] = useState<number>(-1)
@@ -30,7 +29,7 @@ const NewFlavor = (props: {categoriesService: CategoriesService, flavorsService:
                     },
                     batches: []
                 }
-                props.flavorsService.addFlavor(f, status => {
+                services.flavorService().addFlavor(f, status => {
                     if (status.affectedRows > 0) {
                         navigate("/flavor-management")
                     }
@@ -49,7 +48,7 @@ const NewFlavor = (props: {categoriesService: CategoriesService, flavorsService:
     }
 
     useEffect(() => {
-        props.categoriesService.getCategories(cat => {
+        services.categoriesService().getCategories(cat => {
             setCategories(cat)
         })
     }, [])
