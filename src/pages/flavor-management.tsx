@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import { Flavor } from "../models/flavor.model";
-import FlavorsService from "../service/FlavorsService";
 import { Category } from "../models/category.model";
 import { Link } from "react-router-dom";
 import FlavorManagementCategory from "./components/flavor-management-category";
 import Navbar from "./components/navbar";
-import BatchService from "../service/BatchService";
-import CategoriesService from "../service/CategoriesService";
 import NoFlavors from "./components/no-flavors";
 import { IServiceProvider, useService } from "./components/services";
 

@@ -1,4 +1,4 @@
-import axios, { Axios } from "axios"
+import { Axios } from "axios"
 import { Flavor } from "../models/flavor.model"
 import { UpdateStatus } from "../models/putStatus.model"
 class FlavorsService {

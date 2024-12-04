@@ -2,7 +2,7 @@ import { createContext, useContext, useRef } from "react";
 import FlavorsService from "../../service/FlavorsService";
 import BatchService from "../../service/BatchService";
 import CategoriesService from "../../service/CategoriesService";
-import axios, { Axios } from "axios";
+import axios from "axios";
 
 export interface IServiceProvider {
     flavorService: (() => FlavorsService)

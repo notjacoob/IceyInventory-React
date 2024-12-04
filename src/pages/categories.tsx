@@ -1,5 +1,4 @@
 import { FormEvent, useEffect, useState } from "react"
-import CategoriesService from "../service/CategoriesService"
 import Navbar from "./components/navbar"
 import { Category } from "../models/category.model"
 import { IServiceProvider, useService } from "./components/services"
