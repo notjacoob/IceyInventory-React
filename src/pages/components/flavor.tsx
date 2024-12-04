@@ -42,12 +42,12 @@ const FlavorComponent = (props: {onDelete: (id: number) => void, flavor: Flavor 
     }
 
 
-    const newBatch: BatchCreationWrapper = {
+    const [newBatch, setNewBatch] = useState<BatchCreationWrapper>({
         type: "None",
         count: undefined,
         dateMade: undefined,
         flavor: props.flavor.id
-    }
+    })
 
     const [, forceUpdate] = useReducer(x => x + 1, 0)
     let firstRun = useRef(true)
@@ -75,6 +75,17 @@ const FlavorComponent = (props: {onDelete: (id: number) => void, flavor: Flavor 
             alert(error)
         }
     }, [error])
+
+    const updateNewBatch = ({type = newBatch.type, count = newBatch.count, dateMade = newBatch.dateMade, flavor = newBatch.flavor}) => {
+        
+        const newNewBatch: BatchCreationWrapper = {
+            type: type,
+            count: count,
+            dateMade: dateMade,
+            flavor: flavor
+        }
+        setNewBatch(newNewBatch)
+    }
 
     const createNewBatch = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -194,19 +205,19 @@ const FlavorComponent = (props: {onDelete: (id: number) => void, flavor: Flavor 
                 </table>
                 <form className="d-flex flex-column flavor-inventory-control gap-1 p-2" name="newBatch" onSubmit={(event) => createNewBatch(event)}>
                     <h4>Inventory Control</h4>
-                    <input type="number" id="count" name="count" placeholder="Enter count" defaultValue={newBatch.count} onChange={(event) => newBatch.count = Number.parseInt(event.target.value)}/>
+                    <input type="number" id="count" name="count" placeholder="Enter count" defaultValue={newBatch.count} onChange={(event) => updateNewBatch({count: Number.parseInt(event.target.value)})}/>
                     <label htmlFor="datemade">Select date...</label>
-                    <input type="date" id="datemade" name="datemade" defaultValue={newBatch.dateMade?.toISOString().split('T')[0]} onChange={(event) => newBatch.dateMade = new Date(event.target.value)}/>
+                    <input type="date" id="datemade" name="datemade" defaultValue={newBatch.dateMade?.toISOString().split('T')[0]} onChange={(event) => updateNewBatch({dateMade: new Date(event.target.value)})}/>
 
                     <div>
                         <label htmlFor="full">Full Batch</label>
-                        <input type="radio" id="full" name="type" value="Full" onChange={(event) => newBatch.type = event.target.value}/>
+                        <input type="radio" id="full" name="type" value="Full" onChange={(event) => updateNewBatch({type: event.target.value})}/>
                     </div>
                     <div>
                         <label htmlFor="half">Half Batch</label>
-                        <input type="radio" id="half" name="type" value="Half" onChange={(event) => newBatch.type = event.target.value}/>
+                        <input type="radio" id="half" name="type" value="Half" onChange={(event) => updateNewBatch({type: event.target.value})}/>
                     </div>
-                    <input type="hidden" name="flavor" value={props.flavor.id} onChange={(event) => newBatch.flavor = parseInt(event.target.value)}/>
+                    <input type="hidden" name="flavor" value={props.flavor.id} onChange={(event) => updateNewBatch({flavor: parseInt(event.target.value)})}/>
                     <button type="submit" className="submit-btn">Submit</button>
                 </form>
             </div>
